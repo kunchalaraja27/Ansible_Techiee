@@ -1,0 +1,30 @@
+---
+
+- name: Provisioning of aws Environment
+  hosts: localhost
+  gather_facts: False
+  vars_files:
+    - secrets.yml
+  tasks:
+
+    - name: create a security group in ap-south-1
+      ec2_group:
+        name: mysg
+        description: Provisioned by ansible-playbook
+        region: ap-south-1
+        aws_access_key: "{{ AKIA6KHDPMWFXQJZL3YB }}"
+        aws_secret_key: "{{ 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 }}"
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: 0.0.0.0/0
+      register: security_group
+
+    - name: Security group id
+      debug:
+        var: security_group.group_id
